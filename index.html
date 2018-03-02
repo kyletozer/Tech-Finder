@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tech Finder</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+
+  <div id="app" class="container">
+
+    <div id="search" class="hidden">
+      <form id="search-form" action="">
+        <fieldset>
+          <label for="search-term">What are you looking for?</label>
+          <input id="search-term" type="search" placeholder="laptop computers, gaming headsets">
+        </fieldset>
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <div id="results"></div>
+    <div id="map"></div>
+    <div id="standby"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>

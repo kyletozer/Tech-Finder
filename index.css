@@ -1,0 +1,49 @@
+#app {
+  position: relative;
+}
+
+.product {
+  margin: 10px 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.result {
+  margin: 40px 0;
+  border: solid thin #ccc;
+  border-radius: 4px;
+}
+
+.result [class*="col-"] {
+  padding: 0;
+}
+
+.result .result-info {
+  padding: 20px;
+}
+
+#map {
+  background: rgba(0, 0, 0, .75);
+  display: none;
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 5%;
+}
+
+#map p {
+  margin: 0;
+}
+
+.close-window {
+  color: white;
+}
+
+#standby {
+  z-index: 9;
+}
