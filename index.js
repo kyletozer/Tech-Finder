@@ -13,7 +13,15 @@
         }
 
         let html = `
-          Gathering user location
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <div class="list-group">
+                <div class="list-group-item text-center">
+                  Gathering user location
+                </div>
+              </div>
+            </div>
+          </div>
         `;
 
         element.html(html).show();
@@ -22,6 +30,8 @@
           // console.log(position);
           this.position = position;
           resolve();
+        }, error => {
+          reject(error);
         });
       });
     }
@@ -34,31 +44,68 @@
     standby: $('#standby'),
     apiKey: 'xknEGAGSnsMT2j9K9H2RhWAs',
 
-    showResults: function(products) {
+    showErrorPage: function(error) {
 
       let html = '';
 
-      products.forEach(product => {
+      html += `
+        <div class="row">
+          <div class="col-sm-6 offset-sm-3">
+            <div class="list-group">
+              <div class="list-group-item text-center">
+                <strong>${error.message}</strong>
+                <p>Please enable location and refresh this page.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
 
-        let image = product.image ? `<img class="card-img-top" src="${product.image}" alt="image for ${product.name}">` : '';
+      this.standby.show().html(html);
+    },
 
-        let online = product.onlineAvailability ? `This item is available online. <a href="${product.url}">Purchase</a>.` : 'This item is not available online.';
+    showResults: function(products, term) {
 
-        let inStore = product.inStoreAvailability ? `This item is available in store. <span class="find-store clickable" data-sku="${product.sku}">Find Store</span>.` : 'This item is not available in store.';
+      let html = '';
+
+      if(products.length) {
+
+        products.forEach(product => {
+
+          let image = product.image ? `<img class="card-img-top" src="${product.image}" alt="image for ${product.name}">` : '';
+
+          let online = product.onlineAvailability ? `This item is available online. <a class="btn btn-primary" href="${product.url}">Purchase</a>` : 'This item is not available online.';
+
+          let inStore = product.inStoreAvailability ? `This item is available in store. <button class="find-store btn btn-primary" data-sku="${product.sku}">Find Store</button>` : 'This item is not available in store.';
+
+          html += `
+            <div class="row result">
+              <div class="col-md-3 result-image">
+                ${image}
+              </div>
+              <div class="col-md-9 result-info">
+                <h4 class="card-title">${product.name}</h4>
+                <p>${online}</p>
+                <p>${inStore}</p>
+              </div>
+            </div>
+          `;
+        });
+
+      } else {
 
         html += `
-          <div class="row result">
-            <div class="col-md-3 result-image">
-              ${image}
-            </div>
-            <div class="col-md-9 result-info">
-              <h4 class="card-title">${product.name}</h4>
-              <p>${online}</p>
-              <p>${inStore}</p>
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <div class="list-group">
+                <div class="list-group-item text-center">
+                  No results for '${term}'.
+                </div>
+              </div>
             </div>
           </div>
         `;
-      });
+      }
 
       this.results.html(html);
     },
@@ -75,6 +122,7 @@
       this.container.on('submit', '#search-form', function(e) {
         e.preventDefault();
         let term = $(this).find('[type="search"]').val();
+        if(!term) return;
         self.getProducts(term, user.coords.latitude, user.coords.longitude);
       });
 
@@ -104,7 +152,13 @@
       let html = '';
 
       if(!stores.length) {
-        html += `There are no stores in your area.`;
+        html += `
+          <li class="list-group">
+            <div class="list-group-item text-center">
+              There are no stores within a 10 miles of your current position.
+            </div>
+          </li>
+        `;
       }
 
       stores.forEach(store => {
@@ -113,7 +167,7 @@
         html += `
         <li class="list-group-item">
           <p style="float: left;">${fullAddress}</p>
-          <p style="float: right;"><a href="https://maps.google.com/?q=Best Buy ${fullAddress}">View map</a></p>
+          <p style="float: right;"><a href="https://maps.google.com/?q=Best Buy ${fullAddress}" target="_blank">View map</a></p>
         </li>`;
       });
 
@@ -133,22 +187,23 @@
 
     getProducts: function(term, latitude, longitude) {
 
-      term = term.split(' ').map(word => {
+      let formattedTerm = term.split(' ').map(word => {
         return `search=${word}`;
       }).join('&');
 
-      let url = `https://api.bestbuy.com/v1/products(${term})`;
+      let url = `https://api.bestbuy.com/v1/products(${formattedTerm})`;
 
       let settings = {
         format: 'json',
-        apiKey: this.apiKey
+        apiKey: this.apiKey,
+        // cursorMark: '*'
       };
 
       var self = this;
 
       $.get(url, settings, function(data, textStatus, jqXHR) {
-        // console.log(data, textStatus, jqXHR);
-        self.showResults(data.products);
+        console.log(data, textStatus, jqXHR);
+        self.showResults(data.products, term);
       });
     }
   };
@@ -171,8 +226,9 @@
   user.getLocation(app.standby)
   .then(initApp)
   .catch(error => {
-    // handle error
-    console.log(error);
+    setTimeout(() => {
+      app.showErrorPage(error);
+    }, 1000);
   });
 
   // initApp();

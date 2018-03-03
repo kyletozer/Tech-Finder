@@ -1,17 +1,50 @@
+a {
+  color: white;
+}
+
+body {
+  background: linear-gradient(
+      rgba(0, 0, 0, .75),
+      rgba(0, 0, 0, .75)
+    ), url(./images/bg.png) no-repeat center center fixed;
+  background-size: cover;
+}
+
 #app {
   position: relative;
+}
+
+#search label {
+  color: white;
+}
+
+.heading {
+  background: rgba(0, 0, 0, 1);
+  color: white;
+  padding: 20px 0;
 }
 
 .product {
   margin: 10px 0;
 }
 
+#app .btn {
+  background: #000080;
+  border-color: #000080;
+}
+
 .clickable {
   cursor: pointer;
 }
 
-.result {
-  margin: 40px 0;
+#search {
+  padding: 20px;
+}
+
+.result, #search {
+  color: white;
+  background: #333;
+  margin-bottom: 40px;
   border: solid thin #ccc;
   border-radius: 4px;
 }
@@ -24,7 +57,7 @@
   padding: 20px;
 }
 
-#map {
+#map, #standby {
   background: rgba(0, 0, 0, .75);
   display: none;
   position: fixed;
@@ -42,6 +75,7 @@
 
 .close-window {
   color: white;
+  background: black;
 }
 
 #standby {

@@ -10,22 +10,32 @@
 </head>
 <body>
 
-  <div id="app" class="container">
+  <header role="banner">
+    <h1 class="text-center heading">Tech Finder</h1>
+  </header>
 
-    <div id="search" class="hidden">
-      <form id="search-form" action="">
-        <fieldset>
-          <label for="search-term">What are you looking for?</label>
-          <input id="search-term" type="search" placeholder="laptop computers, gaming headsets">
-        </fieldset>
-        <button type="submit">Search</button>
-      </form>
+  <main role="main">
+    <div id="app" class="container">
+
+      <div id="search" class="row">
+        <div class="col-md-6 offset-md-3">
+          <form id="search-form" action="">
+            <fieldset class="form-group">
+              <label for="search-term">Search</label>
+              <input id="search-term" class="form-control" type="search" placeholder="Be specific!">
+            </fieldset>
+            <div class="text-center">
+              <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="results"></div>
+      <div id="map"></div>
+      <div id="standby"></div>
     </div>
-
-    <div id="results"></div>
-    <div id="map"></div>
-    <div id="standby"></div>
-  </div>
+  </main>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="./index.js"></script>
