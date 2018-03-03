@@ -74,7 +74,7 @@
 
           let image = product.image ? `<img class="card-img-top" src="${product.image}" alt="image for ${product.name}">` : '';
 
-          let online = product.onlineAvailability ? `This item is available online. <a class="btn btn-primary" href="${product.url}">Purchase</a>` : 'This item is not available online.';
+          let online = product.onlineAvailability ? `This item is available online. <a class="btn btn-primary" href="${product.url}" target="_blank">Purchase</a>` : 'This item is not available online.';
 
           let inStore = product.inStoreAvailability ? `This item is available in store. <button class="find-store btn btn-primary" data-sku="${product.sku}">Find Store</button>` : 'This item is not available in store.';
 
@@ -91,6 +91,19 @@
             </div>
           `;
         });
+
+        html = `
+          <div id="result-number" class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <div class="list-group">
+                <div class="list-group-item text-center">
+                  Showing top 10 results.
+                </div>
+              </div>
+            </div>
+          </div>
+          ${html}
+        `
 
       } else {
 
@@ -123,12 +136,12 @@
         e.preventDefault();
         let term = $(this).find('[type="search"]').val();
         if(!term) return;
-        self.getProducts(term, user.coords.latitude, user.coords.longitude);
+        self.getProducts(term, 42980820, -81253076);
       });
 
       this.container.on('click', '.find-store', function(e) {
         let sku = $(this).attr('data-sku');
-        let url = `https://api.bestbuy.com/v1/stores(area(${user.coords.latitude},${user.coords.longitude},10))+products(sku=${sku})`;
+        let url = `https://api.bestbuy.com/v1/stores(area(${user.coords.latitude},${user.coords.longitude},100))+products(sku=${sku})`;
 
         let settings = {
           format: 'json',
@@ -137,7 +150,7 @@
         };
 
         $.get(url, settings, function(data, textStatus, jqXHR) {
-          console.log(data, textStatus, jqXHR);
+          // console.log(data, textStatus, jqXHR);
           self.showMap(data.stores);
         });
       });
@@ -148,7 +161,7 @@
     },
 
     showMap: function(stores) {
-      console.log(stores);
+      // console.log(stores);
       let html = '';
 
       if(!stores.length) {
@@ -174,7 +187,8 @@
       html = `
         <div class="container">
           <div class="row">
-            <div class="col-sm-6 offset-sm-3">
+            <div class="col-sm-6 offset-sm-3 text-center">
+              <h4 class="heading">Stores Near You</h4>
               <div class="close-window clickable">Back to search</div>
               <ul class="list-group">${html}</ul>
             </div>
@@ -195,14 +209,13 @@
 
       let settings = {
         format: 'json',
-        apiKey: this.apiKey,
-        // cursorMark: '*'
+        apiKey: this.apiKey
       };
 
       var self = this;
 
       $.get(url, settings, function(data, textStatus, jqXHR) {
-        console.log(data, textStatus, jqXHR);
+        // console.log(data, textStatus, jqXHR);
         self.showResults(data.products, term);
       });
     }
@@ -210,17 +223,9 @@
 
   function initApp() {
 
-    // user = {
-    //   coords: {
-    //     latitude: 44.882942,
-    //     longitude: -93.2775
-    //   }
-    // };
-
     app.standby.hide();
     app.setUpEventHandlers(user.position);
     app.showSearch();
-    // $('#search button').trigger('click');
   }
 
   user.getLocation(app.standby)
@@ -230,7 +235,5 @@
       app.showErrorPage(error);
     }, 1000);
   });
-
-  // initApp();
 
 })();

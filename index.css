@@ -1,7 +1,3 @@
-a {
-  color: white;
-}
-
 body {
   background: linear-gradient(
       rgba(0, 0, 0, .75),
@@ -21,7 +17,7 @@ body {
 .heading {
   background: rgba(0, 0, 0, 1);
   color: white;
-  padding: 20px 0;
+  padding: 20px 10px;
 }
 
 .product {
@@ -41,6 +37,10 @@ body {
   padding: 20px;
 }
 
+#result-number {
+  margin-bottom: 20px;
+}
+
 .result, #search {
   color: white;
   background: #333;
@@ -55,6 +55,11 @@ body {
 
 .result .result-info {
   padding: 20px;
+}
+
+#map {
+  padding: 10px;
+  background: black;
 }
 
 #map, #standby {
